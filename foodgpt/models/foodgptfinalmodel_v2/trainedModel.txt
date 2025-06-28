@@ -1,0 +1,15 @@
+# Trained Model File Missing from GitHub
+
+This folder originally contains the trained GPT model used by the FoodGPT application.
+
+Due to GitHub’s file size limits (100 MB), this file is not included here.
+
+---
+
+## 📦 Download the Model
+
+👉 Download the model file (`model.safetensors`) from this link:  
+https://drive.google.com/file/d/1-2cnCIjMAC7DiBouVtUEwW_CD4Rz8ym6/view?usp=sharing
+
+Once downloaded, place it inside this folder as:
+foodgpt/models/foodgptfinalmodel_v2/model.safetensors
