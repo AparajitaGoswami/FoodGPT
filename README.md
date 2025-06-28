@@ -1,4 +1,4 @@
-# 🌶️🥘 JugaadKitchen.AI: Personalised Recipe Recommender System
+# 🥘 JugaadKitchen.AI: Personalised Recipe Recommender System
 
 **JugaadKitchen.AI** is a generative model-based recipe recommender system inspired by the Indian concept of *jugaad* — making the best out of what you have.  
 It helps users decide what to cook based on the ingredients they already have, their skill level, and available cooking time. The system uses a fine-tuned GPT-2 model alongside a custom **Ingredient Complexity Score (ICS)** algorithm for personalized, feasible recipe suggestions.
