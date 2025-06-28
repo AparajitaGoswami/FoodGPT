@@ -1,0 +1,24 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Ignore IDE settings
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# Large model weights
+*.pt
+*.h5
+*.ckpt
+*.safetensors
+*.bin
+
+# Only ignore the large model weights, keep config
+models/foodgptfinalmodel_v2/model.safetensors

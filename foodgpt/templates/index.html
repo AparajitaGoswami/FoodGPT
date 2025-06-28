@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JugaadKitchen.AI</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleH.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">
+            <!-- Logo image reference using Flask's url_for -->
+            <img src="{{ url_for('static', filename='images/logo.png') }}" style="width:100%;" alt="Logo">
+            <span>JugaadKitchen.AI</span>
+        </div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>JugaadKitchen.AI</h1>
+            <p>Innovating Your Desi Plate, One Prompt at a Time!</p>
+            <a href="/second" class="try-now-button">Try Out!</a>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2>About Us</h2>
+        <p>Welcome to JugaadKitchen.AI, where we bring the magic of Indian cuisine to your plate with a unique blend of innovation and tradition. Explore our wide range of dishes and customize your culinary experience.</p>
+        <p>Our advanced food recommendation system suggests dishes based on your preferences whether it is specific ingredients, dietary needs, or meal types, we have got you covered. Each suggestion comes with a visual preview of the recipe to inspire your cooking journey.</p>
+        <p>Here are a few examples to illustrate the delightful dishes we recommend based on your preferences:</p>
+        <div class="about-images">
+            <figure>
+                <img src="{{ url_for('static', filename='images/example1.jpg') }}" alt="Example Dish 1">
+                <figcaption>Suggests you something diabetic friendly</figcaption>
+            </figure>
+            <figure>
+                <img src="{{ url_for('static', filename='images/example2.jpg') }}" alt="Example Dish 2">
+                <figcaption>Suggests you something with chicken for lunch</figcaption>
+            </figure>
+            <figure>
+                <img src="{{ url_for('static', filename='images/example3.jpg') }}" alt="Example Dish 3">
+                <figcaption>Suggests you some bengali desserts</figcaption>
+            </figure>
+        </div>
+    </section>
+
+</body>
+</html>

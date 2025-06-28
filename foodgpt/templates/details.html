@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe['name'] }}</title>
+    <style>
+        /* Keeping your existing styles and adding/modifying only the recipe-details section */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-image: url("{{ url_for('static', filename='images/bg4.png') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 20px;
+        }
+        
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            opacity: 1;
+        }
+
+        /* Keeping your existing header styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .header img {
+            width: 95px;
+            height: auto;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin: 0;
+            color: #ffcc33;
+            text-align: center;
+            flex-grow: 1;
+            font-weight: bold;
+        }
+
+        .header .home-link {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffcc33;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .header .home-link:hover {
+            color: #ffd966;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffcc33;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced recipe-details styling */
+        .recipe-details {
+            background-color: rgba(74, 73, 73, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .recipe-details img {
+            max-width: 60%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .recipe-details p {
+            line-height: 1.8;
+            color: #ffffff;
+            margin: 20px 0;
+            padding: 10px;
+            border-left: 3px solid #ffcc33;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .recipe-details strong {
+            color: #ffcc33;
+            font-size: 1.1em;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        /* Add hover effect for better interactivity */
+        .recipe-details p:hover {
+            transform: translateX(5px);
+            transition: transform 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+    <!-- Links -->
+    <div>
+        <a href="/" class="home-link">Home</a>
+        <a href="/second" class="home-link">Back</a>
+    </div>
+</div>
+<div class="container">
+    <h1>{{ recipe['name'] }}</h1>
+    <div class="recipe-details">
+        <img src="{{ recipe['image'] }}" alt="Image of {{ recipe['name'] }}">
+        <p><strong>Ingredients:</strong> {{ recipe['ingredients'] }}</p>
+        <p><strong>Description:</strong> {{ recipe['description'] }}</p>
+        <p><strong>Instructions:</strong> {{ recipe['instructions'] }}</p>
+        <p><strong>Cuisine:</strong> {{ recipe['cuisine'] }}</p>
+        <p><strong>Course:</strong> {{ recipe['course'] }}</p>
+        <p><strong>Diet:</strong> {{ recipe['diet'] }}</p>
+        <p><strong>Prep Time:</strong> {{ recipe['preptime'] }}</p>
+        <p><strong>Skill Level:</strong> {{ recipe['skill_level'] }}</p>
+    </div>
+</div>
+</body>
+</html>

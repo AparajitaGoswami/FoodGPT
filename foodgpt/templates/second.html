@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Suggestion</title>
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Load Montserrat font with multiple weights -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styling */
+        :root {
+            --main-font: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            font-family: var(--main-font);
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            background-image: url('static/images/bg2.png');
+            background-size: 100% auto; /* Cover the entire viewport */
+            background-position: top center;
+            background-repeat: no-repeat; 
+            background-attachment: fixed; /* Keep background fixed while scrolling */
+            color: #666;
+            min-height: 100vh;
+            transition: background 0.3s ease-in-out; /* Smooth transition */
+        }
+        #search-results {
+            background-color: #2c3e50; /* New background color */
+            background-image: url('static/images/bg3.png'); /* New background image */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Header Styling */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .header img {
+            width: 95px;
+            height: auto;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin: 0;
+            color: #ffcc33;
+            text-align: center;
+            flex-grow: 1;
+            font-weight: bold;
+        }
+
+        .header .home-link {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffcc33;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .header .home-link:hover {
+            color: #ffd966;
+        }
+
+        /* Content Styling */
+        .container {
+            width: 60%;
+            margin: 150px auto 20px auto; /* Adjust margin to allow space for the header */
+            text-align: center;
+        }
+
+       /* Container for the search bar */
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 20px; /* Combined margin properties */
+        }
+
+        /* Search input field */
+        .form-group input {
+            width: 100%;
+            padding: 15px 60px 15px 20px; /* Adjusted padding to account for button width */
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            background-color: #333;
+            color: white;
+            outline: none;
+            transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+        }
+
+        /* Placeholder text styling */
+        .form-group input::placeholder {
+            color: #bbb;
+            opacity: 0.8; /* Added for better visibility */
+        }
+
+        /* Search button styling */
+        .form-group button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            border: none;
+            background-color: #ffcc33;
+            color: white;
+            border-radius: 0 25px 25px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        /* Button hover effect */
+        .form-group button:hover {
+            background-color: #ffd966;
+        }
+
+        /* Icon within the button */
+        .form-group button i {
+            font-size: 20px;
+        }
+
+        /* Optional: Input focus state */
+        .form-group input:focus {
+            background-color: #444; /* Slightly lighter background when focused */
+            box-shadow: 0 0 0 2px rgba(255, 204, 51, 0.3); /* Subtle yellow glow */
+        }
+
+        /* Optional: Add a subtle animation on focus */
+        @keyframes subtle-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .form-group:focus-within {
+            animation: subtle-pop 0.3s ease-out;
+        }
+
+        /* Recipe List Grid */
+        .recipe-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        /* Recipe Card Styling */
+        .recipe-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px; /* Slightly more rounded corners */
+            background: linear-gradient(135deg, #f4f4f4, #e8e8e8); /* Adds a subtle gradient */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            aspect-ratio: 1 / 1; /* Ensures the square shape */
+        }
+
+        .recipe-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px; /* Matches the parent radius */
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .recipe-item:hover {
+            transform: scale(1.05); /* Slightly larger on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+            background: linear-gradient(135deg, #e0e0e0, #f9f9f9); /* Brighter gradient on hover */
+        }
+
+        .recipe-item:hover img {
+            transform: scale(1.1); /* Zoom effect on the image */
+            filter: brightness(1.2); /* Makes the image slightly brighter */
+        }
+
+        .recipe-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.05); /* Adds a subtle overlay */
+            pointer-events: none;
+            border-radius: 15px;
+        }
+
+
+        /* Overlay for Recipe Name */
+        .recipe-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .recipe-name a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .recipe-name a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sort By Dropdown */
+        .sort-dropdown {
+            margin-top: 20px;
+        }
+
+        .sort-dropdown select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        /* Prep Time Slider Container */
+        .prep-time-slider {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .prep-time-slider label {
+            display: block;
+            font-size: 18px;
+            color: #ffcc33;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .prep-time-slider input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 50%; /* Set width to 50% */
+            height: 4px; /* Thinner track */
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .prep-time-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px; /* Smaller thumb width */
+            height: 12px; /* Smaller thumb height */
+            background: #ffcc33;
+            border: 2px solid #e6b800;
+            border-radius: 50%; /* Round thumb */
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .prep-time-slider input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+        }
+
+        .prep-time-slider input[type="range"]::-moz-range-thumb {
+            width: 12px; /* Smaller thumb width */
+            height: 12px; /* Smaller thumb height */
+            background: #ffcc33;
+            border: 2px solid #e6b800;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .prep-time-slider input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .prep-time-slider .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 50%; /* Match slider width */
+            margin: 10px auto;
+            color: #666;
+            font-size: 12px; /* Smaller labels */
+            font-weight: normal;
+        }
+
+        .prep-time-slider .prep-time-value {
+            margin-top: 10px;
+            font-size: 14px; /* Smaller value text */
+            font-weight: bold;
+            color: #ffcc33;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <!-- Logo -->
+    <img src="static/images/logo.png" alt="Logo">
+    <!-- Title -->
+    <h1>JugaadKitchen.AI</h1>
+    <!-- Home Link -->
+    <a href="/" class="home-link">Home</a>
+</div>
+
+<div class="container">
+    <!-- Search Form -->
+    <form method="POST" class="form-group">
+        <input 
+            type="text" 
+            name="user_input" 
+            placeholder="Enter your preferences (e.g., sweet, quick ...)" 
+            value="{{ user_input | default('') }}" 
+            required
+        >
+        <button type="submit">
+            <i>&#128269;</i>
+        </button>
+    </form>
+    
+
+    {% if search_performed %}
+       <!-- Prep Time Slider -->
+        <form method="POST" action="/second" id="prepTimeForm">
+            <div class="prep-time-slider">
+                <label for="prepTime">Filter preparation time (minutes)</label>
+                <div class="slider-labels">
+                    <span>{{ min_prep_time }} min</span>
+                    <span>{{ max_prep_time }} min</span>
+                </div>
+                <input 
+                    type="range" 
+                    id="prepTime" 
+                    name="prepTime" 
+                    min="{{ min_prep_time }}" 
+                    max="{{ max_prep_time }}" 
+                    value="{{ selected_prep_time | default(max_prep_time) }}"
+                    oninput="updatePrepTimeValue(this.value)"
+                >
+                <div class="prep-time-value">
+                    Selected: <span id="prepTimeValue">{{ selected_prep_time | default(max_prep_time) }}</span> minutes
+                </div>
+                <input type="hidden" name="user_input" value="{{ user_input }}">
+                <input type="hidden" name="sortBy" value="{{ sort_by }}">
+                <input type="hidden" name="filterValue" value="{{ selected_value }}">
+            </div>
+        </form>
+    
+
+        <!-- Sort and Filter Controls -->
+        <div class="sort-controls" style="margin: 20px 0;">
+            <!-- Sort Dropdown -->
+            <form method="POST" action="/second" class="sort-dropdown" style="margin-bottom: 15px;">
+                <label for="sortBy">Sort By:</label>
+                <select name="sortBy" id="sortBy" onchange="this.form.submit()">
+                    <option value="" disabled {% if not sort_by %}selected{% endif %}>Choose an option</option>
+                    <option value="cuisine" {% if sort_by == 'cuisine' %}selected{% endif %}>Cuisine</option>
+                    <option value="course" {% if sort_by == 'course' %}selected{% endif %}>Course</option>
+                    <option value="diet" {% if sort_by == 'diet' %}selected{% endif %}>Diet</option>
+                </select>
+                <input type="hidden" name="user_input" value="{{ user_input }}">
+                <input type="hidden" name="prepTime" id="hiddenPrepTime" value="{{ selected_prep_time | default(max_prep_time) }}">
+            </form>
+
+            {% if sort_by and unique_values %}
+                <!-- Filter Dropdown -->
+                <form method="POST" action="/filter" class="filter-dropdown">
+                    <label for="filterValue">Filter By {{ sort_by | title }}:</label>
+                    <select name="filterValue" id="filterValue" onchange="this.form.submit()">
+                        <option value="" selected>All {{ sort_by | title }}s</option>
+                        {% for value in unique_values %}
+                            <option value="{{ value }}" {% if selected_value == value %}selected{% endif %}>
+                                {{ value }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="sortBy" value="{{ sort_by }}">
+                    <input type="hidden" name="user_input" value="{{ user_input }}">
+                    <input type="hidden" name="prepTime" value="{{ selected_prep_time | default(max_prep_time) }}">
+                </form>
+            {% endif %}
+        </div>
+
+        <!-- Error Message -->
+        {% if error %}
+            <p class="error" style="color: red; margin-top: 20px;">{{ error }}</p>
+        {% endif %}
+
+        <!-- Recipe List -->
+        {% if suggestions %}
+            <div class="recipe-list">
+                {% for suggestion in suggestions %}
+                    <div class="recipe-item">
+                        <img src="{{ suggestion['image'] }}" alt="Image of {{ suggestion['name'] }}">
+                        <div class="recipe-name">
+                            <a href="{{ url_for('details', recipe_name=suggestion['name']) }}">{{ suggestion['name'] }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="font-size: 20px; color: #666; margin-top: 30px;">No recommendations found</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<script>
+    const uniqueValues = {
+        cuisine: [
+            'Udupi', 'Hyderabadi', 'Indian', 'Kerala Recipes', 'South Indian Recipes', 'Asian', 'Mangalorean',
+            'Karnataka', 'North Indian Recipes', 'Maharashtrian Recipes', 'Awadhi', 'Kashmiri',
+            'North East India Recipes', 'Coorg', 'Parsi Recipes', 'Goan Recipes', 'Oriya Recipes', 'Rajasthani',
+            'Fusion', 'Tamil Nadu', 'Bengali Recipes', 'Andhra', 'Coastal Karnataka', 'Himachal', 'Jharkhand',
+            'Chettinad', 'Assamese', 'Malabar', 'Punjabi', 'Konkan', 'Gujarati Recipes', 'North Karnataka',
+            'Continental', 'Bihari', 'Nagaland', 'Sri Lankan', 'Lucknowi', 'Uttarakhand-North Kumaon', 'Sindhi',
+            'Nepalese', 'Indo Chinese', 'Kongunadu', 'Uttar Pradesh', 'Pakistani', 'South Karnataka', 'Mughlai',
+            'Malvani', 'African', 'Thai', 'Middle Eastern', 'Haryana', 'Afghan', 'Sichuan', 'Arab', 'Chinese'
+        ],
+        course: [
+            'South Indian Breakfast', 'Side Dish', 'Any Course', 'Appetizer', 'North Indian Breakfast', 'Snack',
+            'Dinner', 'Lunch', 'Dessert', 'Indian Breakfast', 'World Breakfast', 'Main Course', 'One Pot Dish',
+            'Brunch'
+        ],
+        diet: [
+            'Vegetarian', 'Not Specified', 'Diabetic Friendly', 'High Protein Vegetarian', 'Vegan',
+            'No Onion No Garlic (Sattvic)', 'High Protein Non Vegetarian', 'Non Vegeterian', 'Gluten Free',
+            'Eggetarian'
+        ]
+    };
+
+    function updateOptions(sortBy) {
+        const selectedValueDropdown = document.getElementById('selectedValue');
+        selectedValueDropdown.innerHTML = ''; // Clear previous options
+
+        if (sortBy && uniqueValues[sortBy]) {
+            uniqueValues[sortBy].forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                selectedValueDropdown.appendChild(option);
+            });
+        }
+    }
+</script>
+
+<script>
+    function updatePrepTimeValue(value) {
+        document.getElementById('prepTimeValue').textContent = value;
+    }
+
+    // Auto-submit form when slider value changes (with debounce)
+    let timeout;
+    document.getElementById('prepTime').addEventListener('input', function() {
+        updatePrepTimeValue(this.value);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            document.getElementById('prepTimeForm').submit();
+        }, 500);
+    });
+    const searchPerformed = "{{ search_performed | tojson }}";
+
+        if (searchPerformed) {
+            document.body.id = 'search-results';
+        }
+</script>
+
+</body>
+</html>
